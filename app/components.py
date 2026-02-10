@@ -14,16 +14,24 @@ def sidebar_inputs():
     highlight_keywords = st.sidebar.text_area("Highlight Keywords (comma separated)", "")
     highlight_keywords = [s.strip() for s in highlight_keywords.split(",") if s.strip()]
 
-    st.sidebar.header("Weights (0–1)")
-    experience_w = st.sidebar.number_input("Experience Weight", 0.0, 1.0, 0.4)
-    skills_w = st.sidebar.number_input("Skills Weight", 0.0, 1.0, 0.3)
-    summary_w = st.sidebar.number_input("Summary Weight", 0.0, 1.0, 0.2)
-    education_w = st.sidebar.number_input("Education Weight", 0.0, 1.0, 0.1)
+    # ===== WEIGHTS AS PERCENTAGE =====
+    st.sidebar.header("Weights (%)")
+
+    experience_p = st.sidebar.number_input("Experience (%)", 0, 100, 40)
+    skills_p     = st.sidebar.number_input("Skills (%)", 0, 100, 30)
+    summary_p    = st.sidebar.number_input("Summary (%)", 0, 100, 20)
+    education_p  = st.sidebar.number_input("Education (%)", 0, 100, 10)
+
+    total_p = experience_p + skills_p + summary_p + education_p
+    if total_p != 100:
+        st.sidebar.error(f"Total weight must be 100% (current: {total_p}%)")
+
+    # convert to 0–1
     weights = {
-        "experience": experience_w,
-        "skills": skills_w,
-        "summary": summary_w,
-        "education": education_w
+        "experience": experience_p / 100.0,
+        "skills": skills_p / 100.0,
+        "summary": summary_p / 100.0,
+        "education": education_p / 100.0
     }
 
     st.sidebar.header("Top N CVs to Show")
@@ -89,3 +97,4 @@ def bar_chart(df_top):
     st.subheader("Top CVs Total Score Comparison")
     fig = px.bar(df_top, x="cv_id", y="total_score", color="total_score", text="total_score")
     st.plotly_chart(fig, use_container_width=True)
+

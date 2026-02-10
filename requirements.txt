@@ -9,3 +9,5 @@ PyMuPDF
 scikit-learn
 streamlit
 plotly
+llama-cpp-python
+faiss-cpu
