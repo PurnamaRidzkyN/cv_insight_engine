@@ -40,11 +40,11 @@ class RAGModel:
         return "\n\n".join(sections)
 
 
-    def answer(self, question, chunks, max_tokens=256):
+    def answer(self, question, chunks,job_title, job_description, required_skills, max_tokens=256):
         context = self.build_context(chunks)
         prompt = (
             "You are a professional HR analyst.\n"
-            "Answer ONLY based on the provided CV context.\n\n"
+            "Answer ONLY based on the provided CV context and job information.\n\n"
 
             "If the question asks WHY or COMPARE:\n"
             "- Provide reasoning and comparison.\n"
@@ -53,7 +53,16 @@ class RAGModel:
             "If the question asks WHO:\n"
             "- Identify the candidate and explain briefly.\n\n"
 
-            "Context:\n"
+            "Job Title:\n"
+            f"{job_title}\n\n"
+
+            "Job Description:\n"
+            f"{job_description}\n\n"
+
+            "Required Skills:\n"
+            f"{', '.join(required_skills)}\n\n"
+
+            "Context (CV):\n"
             f"{context}\n\n"
 
             "Question:\n"
@@ -61,6 +70,7 @@ class RAGModel:
 
             "Answer:"
         )
+
 
 
         output = self.model(prompt, max_tokens=max_tokens, temperature=0)

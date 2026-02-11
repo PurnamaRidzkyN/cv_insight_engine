@@ -26,13 +26,22 @@ footer = """
     left: 0;
     bottom: 0;
     width: 100%;
+    background-color: transparent; /* Membuat background transparan */
+    color: #888888; /* Warna abu-abu netral agar masuk ke hitam atau putih */
     text-align: center;
-    color: gray;
+    padding: 10px;
     font-size: 12px;
+    z-index: 999;
+}
+.footer a {
+    color: #00a2ff; /* Warna biru cerah untuk link agar kontras di background gelap */
+    text-decoration: none;
+    font-weight: bold;
 }
 </style>
 <div class="footer">
-© 2026 Purnama Ridzky Nugraha. All rights reserved.
+    Developed by <b>Purnama Ridzky Nugraha</b> | 
+    Source: <a href="https://github.com/username/cv-insight-ai" target="_blank">GitHub Repository</a>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
@@ -155,7 +164,7 @@ if "df_top" in st.session_state:
         top_chunks = st.session_state.retriever.query(query)
 
         # Answer
-        answer = st.session_state.rag_model.answer(query, top_chunks)
+        answer = st.session_state.rag_model.answer(query, top_chunks, job_title, job_description, required_skills)
 
         # ===== OUTPUT BOX =====
         with st.container(border=True):
