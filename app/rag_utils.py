@@ -1,6 +1,10 @@
 from rag.ingest import CandidateIngestor
 from rag.retriever import Retriever
 from rag.rag_qa import RAGModel
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def build_rag(df_top, top_n):
     ingestor = CandidateIngestor()
@@ -16,7 +20,7 @@ def build_rag(df_top, top_n):
     )
 
     rag_model = RAGModel(
-        model_path="llm/gemma-3-4b-it-q4_0.gguf"
+        model_path=os.getenv("MODEL_PATH")
     )
 
     return ingestor, retriever, rag_model

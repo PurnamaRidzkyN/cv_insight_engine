@@ -65,8 +65,8 @@ def radar_charts(df_top):
     st.subheader("Radar Charts for Top CVs")
     categories = ["experience", "skills", "summary", "education"]
 
-    # Buat kolom dinamis sesuai jumlah CV
-    num_cols = min(len(df_top), 4)  # maksimal 4 per baris, bisa diganti
+    
+    num_cols = min(len(df_top), 4)  
     cols = st.columns(num_cols)
 
     for i, row in enumerate(df_top.itertuples()):

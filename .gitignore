@@ -3,5 +3,4 @@ venv/
 .env/
 __pycache__/
 *.pyc
-data/cvs/**
-llm/gemma-3-4b-it-q4_0.gguf
+llm/*

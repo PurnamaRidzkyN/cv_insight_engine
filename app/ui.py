@@ -4,18 +4,38 @@ from datetime import datetime
 import streamlit as st
 import pandas as pd
 import tempfile
-
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 from core.parser import CVPipeline
 from core.scorer import CVScorer
 from components import sidebar_inputs, preview_uploaded, show_results, radar_charts, bar_chart
 from ai_summary import generate_summaries, display_summaries
 from rag_utils import build_rag
 
-st.set_page_config(page_title="CV Analyzer", page_icon="📄", layout="wide")
-st.title("📄 CV Analyzer & Semantic Scoring")
-st.caption("Analyze CVs based on job description and skills.")
-
+st.set_page_config(
+    page_title="CV Insight AI",
+    page_icon="🧠",
+    layout="wide"
+)
+st.title("🧠 CV Insight AI")
+st.caption(
+    "Transparent CV scoring with AI-powered insights and explainable reasoning."
+)
+footer = """
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: gray;
+    font-size: 12px;
+}
+</style>
+<div class="footer">
+© 2026 Purnama Ridzky Nugraha. All rights reserved.
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)
 # ===== SIDEBAR INPUT =====
 (job_title, job_description, required_skills,
  highlight_keywords, weights, top_n) = sidebar_inputs()
@@ -98,7 +118,6 @@ if st.button("Analyze CVs") or 'df_top' in st.session_state:
         st.session_state['df_top'] = df_top
 
     else:
-        # render ulang agar tidak hilang saat form submit
         df_top = st.session_state['df_top']
         show_results(df_top, top_n)
         radar_charts(df_top)

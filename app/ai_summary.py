@@ -3,10 +3,13 @@ import pandas as pd
 from pathlib import Path
 from llama_cpp import Llama
 import os
+from dotenv import load_dotenv
 
 # ====== CONFIG ======
-MAX_CHARS_PER_FIELD = 1000  # aman untuk n_ctx=4096
-MAX_TOKENS = 192  # ringkasan singkat cukup
+load_dotenv()
+
+MAX_CHARS_PER_FIELD = 1000  
+MAX_TOKENS = 192  
 
 def truncate_text(text, max_chars=MAX_CHARS_PER_FIELD):
     if not text:
@@ -14,7 +17,7 @@ def truncate_text(text, max_chars=MAX_CHARS_PER_FIELD):
     return text[:max_chars]
 
 class GGUFModel:
-    def __init__(self, path="llm/gemma-3-4b-it-q4_0.gguf", n_ctx=4096, n_threads=None):
+    def __init__(self, path=os.getenv("MODEL_PATH"), n_ctx=4096, n_threads=None):
         if n_threads is None:
             n_threads = max(1, os.cpu_count() // 2)
 
@@ -22,7 +25,7 @@ class GGUFModel:
             model_path=path,
             n_ctx=n_ctx,
             n_threads=n_threads,
-            n_gpu_layers=0,  # aman buat GPU ~6GB
+            n_gpu_layers=0, 
             verbose=False
         )
 
@@ -34,7 +37,7 @@ class GGUFModel:
         self.history = []
 
     def generate(self, user_text: str) -> str:
-        # Reset history tiap generate supaya tidak menumpuk
+        
         self.history = [f"User: {user_text}"]
 
         prompt = self.system_prompt + "\n"
@@ -52,7 +55,7 @@ class GGUFModel:
         return answer
 
 # ====== MODEL ======
-llm_model = GGUFModel(path="llm/gemma-3-4b-it-q4_0.gguf")
+llm_model = GGUFModel(path=os.getenv("MODEL_PATH"))
 
 # ====== CACHING ======
 @st.cache_data
